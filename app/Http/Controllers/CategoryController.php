@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\Feature;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::with('feature')->get();
+        $categories = Category::with('feature')->latest()->get();
         return view("category.index", compact("categories"));
     }
 
@@ -31,7 +32,6 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        // dd($request);
         try {
             DB::beginTransaction();
             $feature = Feature::create($request->validated());
@@ -61,22 +61,42 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('category.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreCategoryRequest $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        Feature::where('id', $category->feature->id)
+            ->update($request->validated());
+
+        return redirect()->route(route: 'category.index')->with('success', '¡Categoría actaulizada exitosamente!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(string $id)
     {
-        //
+        $message = '';
+        $category = Category::find($id);
+        if ($category->feature->status == 1) {
+            Feature::where('id', $category->feature->id)
+                ->update([
+                    'status' => 0,
+                ]);
+            $message = '¡Categoría eliminada exitosamente!';
+        } else {
+            Feature::where('id', $category->feature->id)
+                ->update([
+                    'status' => 1,
+                ]);
+            $message = '¡Categoría restaurada exitosamente!';
+        }
+
+        return redirect()->route('category.index')->with('success', $message);
+
     }
 }

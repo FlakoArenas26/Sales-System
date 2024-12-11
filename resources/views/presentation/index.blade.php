@@ -1,6 +1,6 @@
 @extends('template')
 
-@section('title', 'Categorías')
+@section('title', 'Presentaciones')
 
 @push('css')
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -50,18 +50,18 @@
     @endif
 
     <div class="container-fluid px-4">
-        <h1 class="mt-4 text-center">Categorías</h1>
+        <h1 class="mt-4 text-center">Presentaciones</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-            <li class="breadcrumb-item">Categorías</li>
+            <li class="breadcrumb-item">Presentaciones</li>
         </ol>
         <div class="mb-4">
-            <a href="{{ route('category.create') }}"><button class="btn btn-success" type="button">Crear</button></a>
+            <a href="{{ route('presentation.create') }}"><button class="btn btn-success" type="button">Crear</button></a>
         </div>
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Categorías
+                Presentaciones
             </div>
             <div class="card-body">
                 <table id="datatablesSimple" class="table table-striped">
@@ -74,16 +74,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categories as $category)
+                        @foreach ($presentations as $presentation)
                             <tr>
                                 <td class="text-center">
-                                    {{ $category->feature->name }}
+                                    {{ $presentation->feature->name }}
                                 </td>
                                 <td class="text-center">
-                                    {{ $category->feature->description }}
+                                    {{ $presentation->feature->description }}
                                 </td>
                                 <td class="text-center">
-                                    @if ($category->feature->status == 1)
+                                    @if ($presentation->feature->status == 1)
                                         <span class="fw-bolder rounded bg-success text-white p-1">Activo</span>
                                     @else
                                         <span class="fw-bolder rounded bg-danger text-white p-1">Inactivo</span>
@@ -92,24 +92,25 @@
                                 <td class="text-center">
                                     <div class="container text-center">
                                         <div class="btn-group" role="group">
-                                            <form action="{{ route('category.edit', ['category' => $category]) }}"
+                                            <form
+                                                action="{{ route('presentation.edit', ['presentation' => $presentation]) }}"
                                                 method="GET">
                                                 <button type="submit" class="btn btn-warning">
                                                     Editar
                                                 </button>
                                             </form>
                                         </div>
-                                        @if ($category->feature->status == 1)
+                                        @if ($presentation->feature->status == 1)
                                             <div class="btn-group" role="group">
                                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal-{{ $category->id }}">
+                                                    data-bs-target="#deleteModal-{{ $presentation->id }}">
                                                     Eliminar
                                                 </button>
                                             </div>
                                         @else
                                             <div class="btn-group" role="group">
                                                 <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal-{{ $category->id }}">
+                                                    data-bs-target="#deleteModal-{{ $presentation->id }}">
                                                     Restaurar
                                                 </button>
                                             </div>
@@ -118,36 +119,36 @@
                                 </td>
                             </tr>
                             <!-- Modal -->
-                            <div class="modal fade" id="deleteModal-{{ $category->id }}" tabindex="-1"
+                            <div class="modal fade" id="deleteModal-{{ $presentation->id }}" tabindex="-1"
                                 aria-labelledby="deleteModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content text-center">
                                         <div class="modal-header text-center">
                                             <h1 class="modal-title fs-5" id="deleteModalLabel">
-                                                {{ $category->feature->status == 1 ? 'Eliminar Categoría' : 'Restaurar Categoría' }}
+                                                {{ $presentation->feature->status == 1 ? 'Eliminar Presentación' : 'Restaurar Presentación' }}
                                             </h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body text-center">
-                                            @if ($category->feature->status == 1)
-                                                ¿Estás seguro de que deseas eliminar la categoría
-                                                <strong>{{ $category->feature->name }}</strong>?
+                                            @if ($presentation->feature->status == 1)
+                                                ¿Estás seguro de que deseas eliminar la presentación
+                                                <strong>{{ $presentation->feature->name }}</strong>?
                                             @else
-                                                ¿Estás seguro de que quieres restaurar la categoría
-                                                <strong>{{ $category->feature->name }}</strong>?
+                                                ¿Estás seguro de que quieres restaurar la presentación
+                                                <strong>{{ $presentation->feature->name }}</strong>?
                                             @endif
                                         </div>
                                         <div class="modal-footer">
                                             <form
-                                                action="{{ route('category.destroy', ['category' => $category->id]) }}"method="post">
+                                                action="{{ route('presentation.destroy', ['presentation' => $presentation->id]) }}"method="post">
                                                 @method('DELETE')
                                                 @csrf
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                     Cancelar</button>
                                                 <button type="submit"
-                                                    class="btn {{ $category->feature->status == 1 ? 'btn-danger' : 'btn-success' }}">
-                                                    {{ $category->feature->status == 1 ? 'Eliminar' : 'Restaurar' }}
+                                                    class="btn {{ $presentation->feature->status == 1 ? 'btn-danger' : 'btn-success' }}">
+                                                    {{ $presentation->feature->status == 1 ? 'Eliminar' : 'Restaurar' }}
                                                 </button>
                                             </form>
                                         </div>

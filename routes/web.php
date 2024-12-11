@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PresentationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,8 +11,15 @@ Route::get('/', function () {
 
 // Ruta Panel
 Route::view('/panel', 'panel.index')->name('panel');
+
 // Ruta Categorías
 Route::resource('/category', CategoryController::class);
+
+// Ruta Marcas
+Route::resource('/brand', BrandController::class);
+
+// Ruta Presentaciones
+Route::resource('/presentation', PresentationController::class);
 
 // Ruta Login
 Route::get('/login', function () {
