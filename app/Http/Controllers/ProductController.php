@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Presentation;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -12,7 +15,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::with('feature')->latest()->get();
+        return view("product.index", compact("products"));
+
     }
 
     /**
@@ -20,7 +25,20 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $brands = Brand::join('features as f', 'brands.feature_id', '=', 'f.id')
+            ->where('f.status', '=', 1)
+            ->get();
+
+        $presentations = Presentation::join('features as f', 'presentations.feature_id', '=', 'f.id')
+            ->where('f.status', '=', 1)
+            ->get();
+
+        $categories = Category::join('features as f', 'categories.feature_id', '=', 'f.id')
+            ->where('f.status', '=', 1)
+            ->get();
+
+        return view("product.create", compact('brands', 'presentations', 'categories'));
+
     }
 
     /**

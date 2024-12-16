@@ -3,6 +3,7 @@
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PresentationController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,9 @@ Route::resource('/brand', BrandController::class);
 
 // Ruta Presentaciones
 Route::resource('/presentation', PresentationController::class);
+
+// Ruta Productos
+Route::resource('/product', ProductController::class);
 
 // Ruta Login
 Route::get('/login', function () {
